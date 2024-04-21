@@ -2,7 +2,7 @@ import streamlit as st
 from prob import *
 from sum import *
 from sections import *
-import sklearn
+
 # CSS styling with background image and translucent overlay
 st.markdown(
     """
