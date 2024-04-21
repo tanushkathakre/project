@@ -1,0 +1,13 @@
+torch
+tf_keras
+summa
+pytextrank
+scikit-learn
+nltk
+tensorflow
+transformers
+tqdm
+numpy
+matplotlib
+seaborn
+pandas
