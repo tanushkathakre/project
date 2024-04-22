@@ -2,8 +2,7 @@ import json
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
 
 # Function to load dataset
 def load_dataset(file_path):
@@ -31,17 +30,27 @@ X_train, X_test, y_section_train, y_section_test, y_punishment_train, y_punishme
 vectorizer = TfidfVectorizer(ngram_range=(1, 2), max_features=5000)
 X_train_vectorized = vectorizer.fit_transform(X_train)
 
-# Train Random Forest classifier
+# Train Random Forest classifier for section prediction
 rf_classifier = RandomForestClassifier(n_estimators=200, random_state=42, class_weight='balanced')
 rf_classifier.fit(X_train_vectorized, y_section_train)
 
-# Transform test data
-X_test_vectorized = vectorizer.transform(X_test)
+# Train RandomForestClassifiers for punishment prediction
+rf_punishment_estimators = []
+for section in np.unique(y_section_train):
+    # Filter data for the current section
+    X_train_section = [X_train[i] for i in range(len(X_train)) if y_section_train[i] == section]
+    y_punishment_train_section = [y_punishment_train[i] for i in range(len(X_train)) if y_section_train[i] == section]
+
+    # Vectorize data
+    X_train_section_vectorized = vectorizer.transform(X_train_section)
+
+    # Train RandomForestClassifier
+    rf_punishment_classifier = RandomForestClassifier(n_estimators=200, random_state=42, class_weight='balanced')
+    rf_punishment_classifier.fit(X_train_section_vectorized, y_punishment_train_section)
+
+    rf_punishment_estimators.append(rf_punishment_classifier)
 
 # Predict section
-section_predictions = rf_classifier.predict(X_test_vectorized)
-
-# Predict punishment
 def predict_section_and_punishment(offense):
     offense_vectorized = vectorizer.transform([offense])
     section_prediction = rf_classifier.predict(offense_vectorized)[0]
@@ -49,8 +58,8 @@ def predict_section_and_punishment(offense):
     punishment_prediction = rf_punishment_estimators[section_index].predict(offense_vectorized)[0]
     return section_prediction, punishment_prediction
 
-# # Test with a sample offense
-# sample_offense = "Some offense text here..."
-# predicted_section, predicted_punishment = predict_punishment(sample_offense)
-# print("Predicted Section:", predicted_section)
-# print("Predicted Punishment:", predicted_punishment)
+# Example usage
+offense = "Theft of property"
+section, punishment = predict_section_and_punishment(offense)
+print("Predicted Section:", section)
+print("Predicted Punishment:", punishment)
