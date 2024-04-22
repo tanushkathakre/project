@@ -42,7 +42,7 @@ X_test_vectorized = vectorizer.transform(X_test)
 section_predictions = rf_classifier.predict(X_test_vectorized)
 
 # Predict punishment
-def predict_punishment(offense):
+def predict_section_and_punishment(offense):
     offense_vectorized = vectorizer.transform([offense])
     section_prediction = rf_classifier.predict(offense_vectorized)[0]
     section_index = np.where(rf_classifier.classes_ == section_prediction)[0][0]
