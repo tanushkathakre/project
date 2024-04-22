@@ -1,6 +1,6 @@
 import streamlit as st
 from prob import *
-from sum import *
+from summ import *
 from sec import *
 
 # CSS styling with background image and translucent overlay
