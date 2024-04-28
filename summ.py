@@ -5,7 +5,7 @@ from nltk.probability import FreqDist
 from heapq import nlargest
 nltk.download('punkt')
 nltk.download('stopwords')
-def generate_summary(text, num_sentences=3):
+def generate_summary(text, num_sentences=5):
     # Tokenize the text into sentences
     sentences = sent_tokenize(text)
     
