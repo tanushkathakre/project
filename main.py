@@ -62,13 +62,17 @@ def main():
 
             # Feature 2: Section Prediction and Punishment
             # Feature 2: Section Prediction and Punishment
+            # Feature 2: Section Prediction and Punishment
             st.markdown("<div class='section'><h3>Section Prediction and Punishment</h3></div>", unsafe_allow_html=True)
             sections, probabilities = predict_section_and_punishment(case_facts)
             
-            for section, probability in zip(sections, probabilities):
-                st.write(f"This particular case falls within the jurisdiction of the {section} section outlined in the Indian Penal Code.")
-                st.write(f"The party found guilty will be subject to the specified charges: {punishments[section]}")
-
+            all_sections = ", ".join(sections)
+            all_punishments = ", ".join([punishments[section] for section in sections])
+            
+            st.write(f"In this particular case, the following sections of the Indian Penal Code are applicable: {all_sections}.")
+            st.write(f"The party found guilty will be subject to the specified charges: {all_punishments}.")
+            
+            
 
         else:
             st.warning("Please enter case facts.")
