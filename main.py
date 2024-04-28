@@ -61,10 +61,14 @@ def main():
             st.write(f"Winning Probability for Respondent: {probabilities[0]}")
 
             # Feature 2: Section Prediction and Punishment
+            # Feature 2: Section Prediction and Punishment
             st.markdown("<div class='section'><h3>Section Prediction and Punishment</h3></div>", unsafe_allow_html=True)
-            section, punishment = predict_section_and_punishment(case_facts)
-            st.write(f"This particular case falls within the jurisdiction of the {section} section outlined in the Indian Penal Code.")
-            st.write(f"The party found guilty will be subject to the specified charges: {punishment}")
+            sections, probabilities = predict_section_and_punishment(case_facts)
+            
+            for section, probability in zip(sections, probabilities):
+                st.write(f"This particular case falls within the jurisdiction of the {section} section outlined in the Indian Penal Code.")
+                st.write(f"The party found guilty will be subject to the specified charges: {punishments[section]}")
+
 
         else:
             st.warning("Please enter case facts.")
